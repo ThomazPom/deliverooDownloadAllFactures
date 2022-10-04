@@ -55,6 +55,7 @@ function discoverAllShadowRoots(){
     discover(document.body)
     return shadowroots;
 }
+
 document.querySelectorAllShadowRoot = function(selector){
     let shadowRoots = discoverAllShadowRoots()
     for (let index = 0; index < shadowRoots.length; index++) {
@@ -74,19 +75,21 @@ document.querySelectorAllShadowRoot("settings-collapse-radio-button[label*=PDF]"
 
 
 
+let browser = null
 async function doAllStuff()
 {
+    browser = await puppeteer.launch(launchArgs);
     await setSettingPDF()
     let selector = "a[href*='download?file_type=invoice_pdf&invoice_origin=restaurant-payments']";
     let page = (await browser.newPage())
     await page.goto("https://restaurant-hub.deliveroo.net/reports/invoices")
     await page.waitForSelector(selector,{timeout:500000})
-    setInterval(z=>{
-        page.click(selector);
-        setTimeout(async z=>{
+    setInterval(async z=>{
             try{
                     console.log(
                         await page.evaluate(selector=>{
+                            
+                            window.open(document.querySelector(selector).href);
                             document.querySelector(selector).remove();
                             return document.querySelectorAll(selector).length
                         },selector),"left")
@@ -94,8 +97,8 @@ async function doAllStuff()
             catch(e){
                 console.log(e)
                 await browser.close();
+                process.exit()
             }
-        },2000)
     },3000)
 
 }

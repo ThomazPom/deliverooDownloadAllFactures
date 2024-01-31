@@ -40,6 +40,7 @@ if(settings.window_real_chromium)
 
 async function setSettingPDF(){
     let page0 = (await browser.pages())[0]
+    console.log("Go to settings",page0)
     await page0.goto("chrome://settings/content/pdfDocuments");
     
     await page0.evaluate((selector) =>{
@@ -78,11 +79,13 @@ document.querySelectorAllShadowRoot("settings-collapse-radio-button[label*=PDF]"
 let browser = null
 async function doAllStuff()
 {
+    console.log("Starting browser")
     browser = await puppeteer.launch(launchArgs);
+    console.log("Browser launched")
     await setSettingPDF()
     let selector = "a[href*='download?file_type=invoice_pdf&invoice_origin=restaurant-payments']";
     let page = (await browser.newPage())
-    await page.goto("https://restaurant-hub.deliveroo.net/reports/invoices")
+    await page.goto("https://partner-hub.deliveroo.net/reports/invoices")
     await page.waitForSelector(selector,{timeout:500000})
     setInterval(async z=>{
             try{

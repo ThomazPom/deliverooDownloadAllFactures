@@ -85,7 +85,7 @@ async function doAllStuff()
     await setSettingPDF()
     let selector = "a[href*='download?file_type=invoice_pdf&invoice_origin=restaurant-payments']";
     let page = (await browser.newPage())
-    await page.goto("https://partner-hub.deliveroo.net/reports/invoices")
+    await page.goto("https://partner-hub.deliveroo.com/reports/invoices")
     await page.waitForSelector(selector,{timeout:500000})
     setInterval(async z=>{
             try{
